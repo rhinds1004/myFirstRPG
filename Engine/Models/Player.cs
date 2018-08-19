@@ -34,7 +34,16 @@ namespace Engine.Models
 
             }
         }
-        public int HitPoints { get; set; }
+        public int HitPoints
+        {
+            get { return _hitPoints; }
+            
+            set
+            {
+                _hitPoints = value;
+                OnPropertyChanged("HitPoints");             
+            }
+        }
         public int ExperiencePoints
         {
             get { return _experiencePoints; }
