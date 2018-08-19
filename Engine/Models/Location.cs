@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Engine.Models
 {
-    public class Locations
+    public class Location
     {
         public int XCoordinate { get; set; }
         public int YCoordinate  { get; set; }
