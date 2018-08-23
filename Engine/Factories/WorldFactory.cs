@@ -42,6 +42,8 @@ namespace Engine.Factories
                 "You see a small hut, with plants drying from the roof.",
                 "/Engine;component/Images/Locations/HerbalistsHut.png");
 
+            newWorld.LocationAt(0, 1).QuestAvailableHere.Add(QuestFactory.GetQuestByID(1));// this makes it so you don't need a temp variable to hold the location
+
             newWorld.AddLocation(0, 2, "Herbalist's garden",
                 "There are many plants here, with snakes hiding behind them.",
                 "/Engine;component/Images/Locations/HerbalistsGarden.png");

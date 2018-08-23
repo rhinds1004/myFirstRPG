@@ -7,6 +7,7 @@ using Engine.Models;
 using Engine.Factories;
 using System.ComponentModel;
 
+
 namespace Engine.ViewModels
 {
     public class GameSession : BaseNotificationClass
@@ -26,6 +27,8 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToWest));
                 OnPropertyChanged(nameof(HasLocationToEast));
                 OnPropertyChanged(nameof(HasLocationToSouth));
+
+                GivePlayerQuestsAtLocation();
             }
         }
 
@@ -90,6 +93,17 @@ namespace Engine.ViewModels
             if (HasLocationToSouth)
             {
                 CurrentLocation = CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1);
+            }
+        }
+
+        private void GivePlayerQuestsAtLocation()
+        {
+            foreach(Quest quest in CurrentLocation.QuestAvailableHere)
+            {
+                if(!CurrentPlayer.Quests.Any(q => q.PlayerQuest.ID == quest.ID)) // USing LINQ to search through the player's quest list and see if any quests avaible at this location are not in the current player's quest list.
+                {
+                    CurrentPlayer.Quests.Add(new Models.QuestStatus(quest));
+                }
             }
         }
 
