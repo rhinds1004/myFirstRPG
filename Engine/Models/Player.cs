@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 
-namespace Engine.Models
+namespace Engine.Models 
 {
     public class Player : BaseNotificationClass
     {
