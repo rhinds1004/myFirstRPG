@@ -13,7 +13,8 @@ namespace Engine.ViewModels
     public class GameSession : BaseNotificationClass
     {
         private Location _currentLocation;
-        
+        private Monster _currentMonster;
+
         public World CurrentWorld { get; set; }
         public Player CurrentPlayer { get; set; }
         public Location CurrentLocation
@@ -29,9 +30,23 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToSouth));
 
                 GivePlayerQuestsAtLocation();
+                GiveMonsterAtLocation(); //TODO maybe at a timer so even if a player stays in the same area monsters will respawn.
             }
         }
 
+        
+
+        public Monster CurrentMonster
+        {
+            get { return _currentMonster; }
+            set
+            {
+                _currentMonster = value;
+                OnPropertyChanged(nameof(CurrentMonster));
+                OnPropertyChanged(nameof(HasMonster));
+
+            }
+        }
         //TODO might be away to simplify this..
         public bool HasLocationToNorth
         {
@@ -49,6 +64,9 @@ namespace Engine.ViewModels
         {
             get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null; }
         }
+
+        public bool HasMonster => CurrentMonster != null;
+        
 
         public GameSession()
         {
@@ -105,6 +123,11 @@ namespace Engine.ViewModels
                     CurrentPlayer.Quests.Add(new Models.QuestStatus(quest));
                 }
             }
+        }
+
+        private void GiveMonsterAtLocation()
+        {
+            CurrentMonster = CurrentLocation.GetMonster();
         }
 
     }
