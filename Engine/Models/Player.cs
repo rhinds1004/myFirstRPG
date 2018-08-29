@@ -69,13 +69,20 @@ namespace Engine.Models
                 OnPropertyChanged(nameof(Gold));
             }
         }   
-        public ObservableCollection<GameItem> Inventory { get; set; }  
+        public ObservableCollection<GameItem> Inventory { get; set; }
+        public List<GameItem> Weapons => Inventory.Where(i => i is Weapon).ToList();
         public ObservableCollection<QuestStatus> Quests { get; set; }   //isn't any backing variable defined. It is handled by the language?
 
         public Player()
         {
             Inventory = new ObservableCollection<GameItem>();
             Quests = new ObservableCollection<QuestStatus>(); //Even though the backing variable isn't defined by code language know what the variable is.
+        }
+
+        public void AddItemToInventory(GameItem item)
+        {
+            Inventory.Add(item);
+            OnPropertyChanged(nameof(Weapons));
         }
     }
 }

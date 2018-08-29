@@ -32,6 +32,10 @@ namespace Engine.Models
             
             if(standardItem != null)
             {
+                if(standardItem is Weapon)
+                {
+                    return (standardItem as Weapon).Clone(); //casts a standItem into a weapon to make the weapon clone function to be used not the standardItem clone function.
+                }
                 return standardItem.Clone();
             }
 

@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using Engine.Models;
 using Engine.Factories;
 using System.ComponentModel;
-
+using Engine.EventArgs;
 
 namespace Engine.ViewModels
 {
     public class GameSession : BaseNotificationClass
     {
+        public event EventHandler<GameMessageEventArgs> OnMessageRaised;
+
+        #region Properties
         private Location _currentLocation;
         private Monster _currentMonster;
 
@@ -30,7 +33,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasLocationToSouth));
 
                 GivePlayerQuestsAtLocation();
-                GiveMonsterAtLocation(); //TODO maybe at a timer so even if a player stays in the same area monsters will respawn.
+                GetMonsterAtLocation(); //TODO maybe at a timer so even if a player stays in the same area monsters will respawn.
             }
         }
 
@@ -45,8 +48,16 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(CurrentMonster));
                 OnPropertyChanged(nameof(HasMonster));
 
+                if(CurrentMonster != null)
+                {
+                    RaiseMessage("");
+                    RaiseMessage($"You see a {CurrentMonster.Name} here!");
+                }
             }
         }
+
+        public Weapon CurrentWeapon { get; set; }
+
         //TODO might be away to simplify this..
         public bool HasLocationToNorth
         {
@@ -66,7 +77,8 @@ namespace Engine.ViewModels
         }
 
         public bool HasMonster => CurrentMonster != null;
-        
+
+        #endregion
 
         public GameSession()
         {
@@ -79,6 +91,12 @@ namespace Engine.ViewModels
                 Level = 1,
                 Gold = 1000000
             };
+
+            //TODO remove and add first. Since player could just keep selling pointy sticks.
+            if(!CurrentPlayer.Weapons.Any())
+            {
+                CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
+            }
 
             CurrentWorld = WorldFactory.CreateWorld();
 
@@ -125,9 +143,77 @@ namespace Engine.ViewModels
             }
         }
 
-        private void GiveMonsterAtLocation()
+        private void GetMonsterAtLocation()
         {
             CurrentMonster = CurrentLocation.GetMonster();
+        }
+
+        public void AttackCurrentMonster()
+        {
+            //TODO change to fists? But type of logic is guard clause called early exit.
+            if (CurrentWeapon == null)
+            {
+                RaiseMessage("You Must select a weapon, to attack.");
+                return;
+            }
+
+            //Determine damage to monster
+            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MinimumDamge, CurrentWeapon.MaximumDamge);
+
+            if(damageToMonster == 0)
+            {
+                RaiseMessage($"You missed the {CurrentMonster.Name}");
+            }
+            else
+            {
+                CurrentMonster.HitPoints -= damageToMonster;
+                RaiseMessage($"You hit the {CurrentMonster.Name} for {damageToMonster}.");
+            }
+
+            if(CurrentMonster.HitPoints <= 0)
+            {
+                RaiseMessage("");
+                RaiseMessage($"You defeated the {CurrentMonster.Name}");
+
+                CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
+                RaiseMessage($"You recieved {CurrentMonster.RewardExperiencePoints} expierence points.");
+
+                CurrentPlayer.Gold += CurrentMonster.RewardGold;
+                RaiseMessage($"You recieved {CurrentMonster.RewardGold} gold.");
+
+                foreach(ItemQuantity itemQuantity in CurrentMonster.Inventory)
+                {
+                    GameItem item = ItemFactory.CreateGameItem(itemQuantity.ItemID);
+                    CurrentPlayer.AddItemToInventory(item);
+                    RaiseMessage($"You recieved {itemQuantity.Quantity} {item.Name}.");
+                }
+
+                //Get another monster to fight
+                GetMonsterAtLocation();
+            }
+            else
+            {
+                // If monster is still alive, let the monster attack
+                int damageToPlayer = RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumHitPoints);
+                if(damageToPlayer == 0 )
+                {
+                    CurrentPlayer.HitPoints -= damageToPlayer;
+                    RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
+                }
+                if(CurrentPlayer.HitPoints <= 0)
+                {
+                    RaiseMessage("");
+                    RaiseMessage($"The {CurrentMonster.Name} killed you");
+
+                    CurrentLocation = CurrentWorld.LocationAt(0, -1); //return player to home
+                    CurrentPlayer.HitPoints = CurrentPlayer.Level * 10; //completely heal the player
+                }
+            }
+        }
+
+        private void RaiseMessage(string message)
+        {
+            OnMessageRaised?.Invoke(this, new GameMessageEventArgs(message));
         }
 
     }
