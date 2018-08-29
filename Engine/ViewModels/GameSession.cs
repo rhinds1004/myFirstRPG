@@ -195,12 +195,17 @@ namespace Engine.ViewModels
             {
                 // If monster is still alive, let the monster attack
                 int damageToPlayer = RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumHitPoints);
-                if(damageToPlayer == 0 )
+                if(damageToPlayer <= 0 )
+                {
+                    RaiseMessage($"The {CurrentMonster.Name} missed you!");
+                }
+                else if (damageToPlayer > 0)
                 {
                     CurrentPlayer.HitPoints -= damageToPlayer;
                     RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
                 }
-                if(CurrentPlayer.HitPoints <= 0)
+
+                if (CurrentPlayer.HitPoints <= 0)
                 {
                     RaiseMessage("");
                     RaiseMessage($"The {CurrentMonster.Name} killed you");
