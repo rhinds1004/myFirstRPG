@@ -16,6 +16,7 @@ namespace Engine.Models
         private int _hitPoints;
         private int _level;
         private int _gold;
+        private Weapon _currentWeapon;
 
         public string Name
         {
@@ -82,7 +83,18 @@ namespace Engine.Models
         public void AddItemToInventory(GameItem item)
         {
             Inventory.Add(item);
+
             OnPropertyChanged(nameof(Weapons));
+        }
+
+        public Weapon CurrentWeapon { get { return _currentWeapon; }
+            set {
+                    _currentWeapon = value;
+                    OnPropertyChanged(nameof(CurrentWeapon));
+
+            }
+
+
         }
     }
 }

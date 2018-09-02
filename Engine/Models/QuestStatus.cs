@@ -9,7 +9,7 @@ namespace Engine.Models
     public class QuestStatus
     {
         public Quest PlayerQuest { get; set; }
-        public bool IsCompleted { get; set; }
+        public bool IsCompleted { get; set; } //TODO doesn't update quest status
 
         public QuestStatus(Quest quest) //a arguement not need for IsCompleted as all quest will start out by being not completed.
         {

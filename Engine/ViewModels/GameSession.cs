@@ -56,25 +56,21 @@ namespace Engine.ViewModels
             }
         }
 
-        public Weapon CurrentWeapon { get; set; }
+        
 
         //TODO might be away to simplify this..
-        public bool HasLocationToNorth
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; }
-        }
-        public bool HasLocationToWest
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null; }
-        }
-        public bool HasLocationToEast
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null; }
-        }
-        public bool HasLocationToSouth
-        {
-            get { return CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null; }
-        }
+        public bool HasLocationToNorth =>
+            CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; 
+
+        public bool HasLocationToWest =>
+            CurrentWorld.LocationAt(CurrentLocation.XCoordinate - 1, CurrentLocation.YCoordinate) != null; 
+        
+        public bool HasLocationToEast =>
+            CurrentWorld.LocationAt(CurrentLocation.XCoordinate + 1, CurrentLocation.YCoordinate) != null; 
+        
+        public bool HasLocationToSouth =>
+            CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate - 1) != null; 
+        
 
         public bool HasMonster => CurrentMonster != null;
 
@@ -93,9 +89,11 @@ namespace Engine.ViewModels
             };
 
             //TODO remove and add first. Since player could just keep selling pointy sticks.
+            //only happens once?
             if(!CurrentPlayer.Weapons.Any())
             {
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
+
             }
 
             CurrentWorld = WorldFactory.CreateWorld();
@@ -151,14 +149,14 @@ namespace Engine.ViewModels
         public void AttackCurrentMonster()
         {
             //TODO change to fists? But type of logic is guard clause called early exit.
-            if (CurrentWeapon == null)
+            if (CurrentPlayer.CurrentWeapon == null)
             {
                 RaiseMessage("You Must select a weapon, to attack.");
                 return;
             }
 
             //Determine damage to monster
-            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MinimumDamge, CurrentWeapon.MaximumDamge);
+            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentPlayer.CurrentWeapon.MinimumDamge, CurrentPlayer.CurrentWeapon.MaximumDamge);
 
             if(damageToMonster == 0)
             {
