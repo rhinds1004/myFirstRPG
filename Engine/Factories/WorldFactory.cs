@@ -35,7 +35,7 @@ namespace Engine.Factories
 
             newWorld.AddLocation(1, 0, "Town Gate",
                 "There is a gate here, protecting the town from giant spiders.",
-                "Locations/TownGate.png");
+                "TownGate.png");
 
             newWorld.AddLocation(2, 0, "Spider Forest",
                 "The trees in this forest are covered with spider webs.",
