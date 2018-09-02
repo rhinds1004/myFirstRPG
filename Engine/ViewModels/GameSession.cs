@@ -88,8 +88,6 @@ namespace Engine.ViewModels
                 Gold = 1000000
             };
 
-            //TODO remove and add first. Since player could just keep selling pointy sticks.
-            //only happens once?
             if(!CurrentPlayer.Weapons.Any())
             {
                 CurrentPlayer.AddItemToInventory(ItemFactory.CreateGameItem(1001));
