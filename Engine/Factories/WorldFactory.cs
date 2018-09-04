@@ -13,6 +13,7 @@ namespace Engine.Factories
         {
             World newWorld = new World();
 
+            //TODO find a way to link names to location coords.
             newWorld.AddLocation(-2, -1, "Farmer's Field",
                 "There are rows of corn growing here, with giant rats hiding between them.",
                 "FarmFields.png");
@@ -23,12 +24,14 @@ namespace Engine.Factories
             newWorld.AddLocation(-1, -1, "Farmer's House",
                 "This is the house of your neighbor, Farmer Ted.",
                 "Farmhouse.png");
+            newWorld.LocationAt(-1, -1).TraderHere = TraderFactory.GetTraderByName("Farmer Ted");
 
             newWorld.AddLocation(0, -1, "Home", "This is your home", "Home.png");
 
             newWorld.AddLocation(-1, 0, "Trading Shop",
                 "The shop of Susan, the trader.",
                 "Trader.png");
+            newWorld.LocationAt(-1, 0).TraderHere = TraderFactory.GetTraderByName("Susan");
 
             newWorld.AddLocation(0, 0, "Town square",
                 "You see a fountain here.",
@@ -47,6 +50,7 @@ namespace Engine.Factories
             newWorld.AddLocation(0, 1, "Herbalist's hut",
                 "You see a small hut, with plants drying from the roof.",
                 "HerbalistsHut.png");
+            newWorld.LocationAt(0, 1).TraderHere = TraderFactory.GetTraderByName("Pete the Herbalist");
 
             newWorld.LocationAt(0, 1).QuestAvailableHere.Add(QuestFactory.GetQuestByID(1));// this makes it so you don't need a temp variable to hold the location
 
