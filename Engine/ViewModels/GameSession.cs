@@ -37,7 +37,7 @@ namespace Engine.ViewModels
                 GivePlayerQuestsAtLocation();
                 GetMonsterAtLocation(); //TODO maybe at a timer so even if a player stays in the same area monsters will respawn.
 
-                _currentTrader = CurrentLocation.TraderHere;
+                CurrentTrader = CurrentLocation.TraderHere;
             }
         }
 
