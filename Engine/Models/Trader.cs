@@ -23,7 +23,7 @@ namespace Engine.Models
         {
             Inventory.Add(item);
         }
-        public void RemoveItemToInventory(GameItem item)
+        public void RemoveItemFromInventory(GameItem item)
         {
             Inventory.Remove(item);
         }
