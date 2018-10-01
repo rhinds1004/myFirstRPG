@@ -51,5 +51,28 @@ namespace WPFUI
         {
             Close();
         }
+
+        private void OnClick_SellAll(object sender, RoutedEventArgs e)
+        {
+            GameItem item = ((FrameworkElement)sender).DataContext as GameItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
+         
+           
+            if (item != null)
+            {
+             
+                for(int i = Session.CurrentPlayer.Inventory.Count - 1; i > 0; i--)
+                {
+                    if(Session.CurrentPlayer.Inventory[i].Name == item.Name)
+                    {
+                        Session.CurrentPlayer.Gold += Session.CurrentPlayer.Inventory[i].Price;
+                        Session.CurrentTrader.AddItemToInventory(Session.CurrentPlayer.Inventory[i]);
+                        Session.CurrentPlayer.RemoveItemFromInventory(Session.CurrentPlayer.Inventory[i]);
+                    }
+                }
+
+              
+            }
+        }
+            
     }
 }

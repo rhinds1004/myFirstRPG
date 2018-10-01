@@ -58,7 +58,22 @@
                             <Button Click="OnClick_Sell"
                                     Width="55"
                                     Content="Sell" />
+                         
+                                      </DataTemplate>
+                        
+
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn MinWidth="75" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="OnClick_SellAll"
+                                    Width="55"
+                                    Content="Sell All" />
+
                         </DataTemplate>
+
+
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
