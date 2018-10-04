@@ -18,27 +18,27 @@ namespace WPFUI
 
         private void OnClick_Sell(object sender, RoutedEventArgs e)
         {
-            GameItem item = ((FrameworkElement)sender).DataContext as GameItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
+            GroupedInventoryItem groupedInventoryItem = ((FrameworkElement)sender).DataContext as GroupedInventoryItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
 
-            if(item != null)
+            if(groupedInventoryItem != null)
             {
-                Session.CurrentPlayer.Gold += item.Price;
-                Session.CurrentTrader.AddItemToInventory(item);
-                Session.CurrentPlayer.RemoveItemFromInventory(item);
+                Session.CurrentPlayer.Gold += groupedInventoryItem.Item.Price;
+                Session.CurrentTrader.AddItemToInventory(groupedInventoryItem.Item);
+                Session.CurrentPlayer.RemoveItemFromInventory(groupedInventoryItem.Item);
             }
         }
 
         private void OnClick_Buy(object sender, RoutedEventArgs e)
         {
-            GameItem item = ((FrameworkElement)sender).DataContext as GameItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
+            GroupedInventoryItem groupedInventoryItem = ((FrameworkElement)sender).DataContext as GroupedInventoryItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
 
-            if (item != null)
+            if (groupedInventoryItem != null)
             {
-                if (Session.CurrentPlayer.Gold >= item.Price)
+                if (Session.CurrentPlayer.Gold >= groupedInventoryItem.Item.Price)
                 {
-                    Session.CurrentPlayer.Gold -= item.Price;
-                    Session.CurrentTrader.RemoveItemFromInventory(item);
-                    Session.CurrentPlayer.AddItemToInventory(item);
+                    Session.CurrentPlayer.Gold -= groupedInventoryItem.Item.Price;
+                    Session.CurrentTrader.RemoveItemFromInventory(groupedInventoryItem.Item);
+                    Session.CurrentPlayer.AddItemToInventory(groupedInventoryItem.Item);
                 }
                 else
                 {
@@ -54,25 +54,23 @@ namespace WPFUI
 
         private void OnClick_SellAll(object sender, RoutedEventArgs e)
         {
-            GameItem item = ((FrameworkElement)sender).DataContext as GameItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
-         
-           
-            if (item != null)
-            {
-             
-                for(int i = Session.CurrentPlayer.Inventory.Count - 1; i > 0; i--)
-                {
-                    if(Session.CurrentPlayer.Inventory[i].Name == item.Name)
-                    {
-                        Session.CurrentPlayer.Gold += Session.CurrentPlayer.Inventory[i].Price;
-                        Session.CurrentTrader.AddItemToInventory(Session.CurrentPlayer.Inventory[i]);
-                        Session.CurrentPlayer.RemoveItemFromInventory(Session.CurrentPlayer.Inventory[i]);
-                    }
-                }
+            GroupedInventoryItem groupedInventoryItem = ((FrameworkElement)sender).DataContext as GroupedInventoryItem; //gets the item that sent the click event.. in this case the row in the datagrid click by the player
 
-              
+
+            if (groupedInventoryItem != null)
+            {
+                              for (int i =groupedInventoryItem.Quantity; i > 0; i--)
+                    {
+
+                        Session.CurrentPlayer.Gold += groupedInventoryItem.Item.Price;
+                            Session.CurrentTrader.AddItemToInventory(groupedInventoryItem.Item);
+                            Session.CurrentPlayer.RemoveItemFromInventory(groupedInventoryItem.Item);
+                        
+                    }
+
+                }
             }
         }
-            
+
     }
-}
+

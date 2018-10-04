@@ -59,5 +59,7 @@ namespace WPFUI
             tradeScreen.DataContext = _gameSession; //passing the gamession by reference, therefore all changes done in tradescreen will be done in mainwindow as well.
             tradeScreen.ShowDialog(); //makes the screen modal. Can't continue until window is closed.
         }
+
+       
     }
 }

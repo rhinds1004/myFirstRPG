@@ -97,7 +97,7 @@ namespace Engine.ViewModels
             {
                 Name = "Jack",
                 CharacterClass = "Fighter",
-                CurrentHitPoints = 10,
+                CurrentHitPoints = 60,
                 ExperiencePoints = 0,
                 Level = 1,
                 Gold = 1000000
