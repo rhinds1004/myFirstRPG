@@ -10,12 +10,13 @@ namespace Engine.Models
 {
     public class Player : LivingEntity
     {
+        #region Properties
         private int _experiencePoints;
-        private string _name;
+     
         private string _characterClass;
-        private int _hitPoints;
+      
         private int _level;
-        private int _gold;
+ 
         private Weapon _currentWeapon;
 
       
@@ -50,21 +51,23 @@ namespace Engine.Models
 
         public ObservableCollection<QuestStatus> Quests { get; set; }   //isn't any backing variable defined. It is handled by the language?
 
-        public Player()
+        #endregion
+
+        public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints,
+            int currentHitPoints, int gold): base(name, maximumHitPoints, currentHitPoints, gold)
         {
+            CharacterClass = characterClass;
+            ExperiencePoints = experiencePoints;
             Quests = new ObservableCollection<QuestStatus>(); //Even though the backing variable isn't defined by code language know what the variable is.
         }
 
 
-
+        //TODO is this removed?
         public Weapon CurrentWeapon { get { return _currentWeapon; }
             set {
                     _currentWeapon = value;
                     OnPropertyChanged(nameof(CurrentWeapon));
-
             }
-
-
         }
 
     

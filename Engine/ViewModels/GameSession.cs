@@ -70,7 +70,7 @@ namespace Engine.ViewModels
                 OnPropertyChanged(nameof(HasTrader));
             }
         }
-
+        //TODO currentWeapon now moved here?
         //TODO might be away to simplify this..
         public bool HasLocationToNorth =>
             CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; 
@@ -93,15 +93,7 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
-            CurrentPlayer = new Player
-            {
-                Name = "Jack",
-                CharacterClass = "Fighter",
-                CurrentHitPoints = 60,
-                ExperiencePoints = 0,
-                Level = 1,
-                Gold = 1000000
-            };
+            CurrentPlayer = new Player("Jack", "Fighter", 60, 0, 1, 1000000 );
 
             if(!CurrentPlayer.Weapons.Any())
             {
