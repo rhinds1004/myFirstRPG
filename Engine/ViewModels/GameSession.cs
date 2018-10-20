@@ -21,16 +21,19 @@ namespace Engine.ViewModels
         private Trader _currentTrader;
 
         public World CurrentWorld { get; set; }
+
         public Player CurrentPlayer { get { return _currentPlayer; }
             set {
                 if (_currentPlayer != null)
                 {
+                    _currentPlayer.OnLevelUp -= OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled -= OnCurrentPlayerKilled;
                 }
                 _currentPlayer = value;
 
                 if(_currentPlayer != null)
                 {
+                    _currentPlayer.OnLevelUp += OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled += OnCurrentPlayerKilled;
                 }
 
@@ -114,7 +117,7 @@ namespace Engine.ViewModels
 
         public GameSession()
         {
-            CurrentPlayer = new Player("Jack", "Fighter", 0, 60, 60, 1000000 );
+            CurrentPlayer = new Player("Jack", "Fighter", 0, 10, 10, 1000000 );
 
             if(!CurrentPlayer.Weapons.Any())
             {
@@ -182,17 +185,20 @@ namespace Engine.ViewModels
                         RaiseMessage($"You completed the '{quest.Name}' quest");
 
                         //Give rewards
-                        CurrentPlayer.ExperiencePoints += quest.RewardExperiencePoints;
+                        
                         RaiseMessage($"You recieve {quest.RewardExperiencePoints} experience");
+                        CurrentPlayer.AddExperience(quest.RewardExperiencePoints);
 
-                        CurrentPlayer.RecieveGold(quest.RewardGold);
+                       
                         RaiseMessage($"You recieve {quest.RewardGold} gold");
+                        CurrentPlayer.RecieveGold(quest.RewardGold);
 
-                        foreach(ItemQuantity itemQuantity in quest.RewardItems)
+                        foreach (ItemQuantity itemQuantity in quest.RewardItems)
                         {
                             GameItem rewardItem = ItemFactory.CreateGameItem(itemQuantity.ItemID);
-                            CurrentPlayer.AddItemToInventory(rewardItem);
+                            
                             RaiseMessage($"You recieve {rewardItem.Name}");
+                            CurrentPlayer.AddItemToInventory(rewardItem);
                         }
 
                         //Mark quest as completed
@@ -288,8 +294,8 @@ namespace Engine.ViewModels
             RaiseMessage($"You defeated the {CurrentMonster.Name}");
 
             
-            RaiseMessage($"You recieved {CurrentMonster.RewardExperiencePoints} expierence points.");
-            CurrentPlayer.ExperiencePoints += CurrentMonster.RewardExperiencePoints;
+            RaiseMessage($"You recieved {CurrentMonster.RewardExperiencePoints} experierence points.");
+            CurrentPlayer.AddExperience(CurrentMonster.RewardExperiencePoints);
 
             RaiseMessage($"You recieved {CurrentMonster.Gold} gold.");
             CurrentPlayer.RecieveGold(CurrentMonster.Gold);
@@ -311,6 +317,11 @@ namespace Engine.ViewModels
 
             CurrentLocation = CurrentWorld.LocationAt(0, -1); //return player to home
             CurrentPlayer.CompleteHeal();
+        }
+
+        private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs eventArgs)
+        {
+            RaiseMessage($"You are now level {CurrentPlayer.Level}!");
         }
 
         private void RaiseMessage(string message)

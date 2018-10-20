@@ -15,8 +15,6 @@ namespace Engine.Models
      
         private string _characterClass;
       
-        private int _level;
- 
         private Weapon _currentWeapon;
 
       
@@ -33,25 +31,21 @@ namespace Engine.Models
         public int ExperiencePoints
         {
             get { return _experiencePoints; }
-            set
+            private set
             {
                 _experiencePoints = value;
                 OnPropertyChanged(nameof(ExperiencePoints));
+                SetLevelAndMaximumHitPoints();
             } 
         }
-        public int Level {
-            get { return _level; }
-            set
-            {
-                _level = value;
-                OnPropertyChanged(nameof(Level));
-            }
-        }
-   
+
+       
 
         public ObservableCollection<QuestStatus> Quests { get; set; }   //isn't any backing variable defined. It is handled by the language?
 
         #endregion
+
+        public event EventHandler OnLevelUp;
 
         public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints,
             int currentHitPoints, int gold): base(name, maximumHitPoints, currentHitPoints, gold)
@@ -81,6 +75,24 @@ namespace Engine.Models
                 }
             }
             return true;
+        }
+
+        public void AddExperience(int experiencePoints)
+        {
+            ExperiencePoints += experiencePoints;
+        }
+
+        private void SetLevelAndMaximumHitPoints()
+        {
+            int originalLevel = Level;
+
+            Level = (ExperiencePoints / 100) + 1;
+
+            if(Level != originalLevel)
+            {
+                MaximumHitPoints = Level * 10; //TODO add modifier(s) for different classes.
+                OnLevelUp?.Invoke(this, System.EventArgs.Empty);
+            }
         }
     }
 }

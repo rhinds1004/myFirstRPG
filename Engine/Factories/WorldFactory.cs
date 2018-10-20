@@ -19,7 +19,7 @@ namespace Engine.Factories
                 "FarmFields.png");
 
             newWorld.LocationAt(-2, -1).AddMonster(2, 100); //type 2 is rat with 100 encounterrate
-
+       
 
             newWorld.AddLocation(-1, -1, "Farmer's House",
                 "This is the house of your neighbor, Farmer Ted.",
