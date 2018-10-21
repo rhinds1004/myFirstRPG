@@ -6,10 +6,21 @@ using System.Threading.Tasks;
 
 namespace Engine.Models
 {
-    public class QuestStatus
+    public class QuestStatus : BaseNotificationClass
     {
-        public Quest PlayerQuest { get; set; }
-        public bool IsCompleted { get; set; } //TODO doesn't update quest status
+        private bool _isCompleted;
+
+        public Quest PlayerQuest { get;}
+        public bool IsCompleted
+        {
+            get { return _isCompleted; }
+
+            set
+            {
+                _isCompleted = value;
+                OnPropertyChanged();
+            }
+        }
 
         public QuestStatus(Quest quest) //a arguement not need for IsCompleted as all quest will start out by being not completed.
         {

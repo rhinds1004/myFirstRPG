@@ -24,7 +24,7 @@ namespace Engine.Models
             set
             {
                 _characterClass = value;
-                OnPropertyChanged(nameof(CharacterClass));
+                OnPropertyChanged();
             }
         }
        
@@ -34,14 +34,14 @@ namespace Engine.Models
             private set
             {
                 _experiencePoints = value;
-                OnPropertyChanged(nameof(ExperiencePoints));
+                OnPropertyChanged();
                 SetLevelAndMaximumHitPoints();
             } 
         }
 
        
 
-        public ObservableCollection<QuestStatus> Quests { get; set; }   //isn't any backing variable defined. It is handled by the language?
+        public ObservableCollection<QuestStatus> Quests { get; }   
 
         #endregion
 

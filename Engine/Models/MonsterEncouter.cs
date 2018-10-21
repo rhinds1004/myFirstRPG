@@ -8,7 +8,7 @@ namespace Engine.Models
 {
     public class MonsterEncouter
     {
-        public int MonsterID { get; set; }
+        public int MonsterID { get; }
         public int ChanceOfEncountering { get; set; }
 
         public MonsterEncouter(int monsterID, int chanceOfEncountering)
