@@ -15,9 +15,7 @@ namespace Engine.Models
      
         private string _characterClass;
       
-        private Weapon _currentWeapon;
-
-      
+              
         public string CharacterClass
         {
             get { return _characterClass; }
@@ -45,7 +43,7 @@ namespace Engine.Models
 
         #endregion
 
-        public event EventHandler OnLevelUp;
+        public event EventHandler OnLeveledUp;
 
         public Player(string name, string characterClass, int experiencePoints, int maximumHitPoints,
             int currentHitPoints, int gold): base(name, maximumHitPoints, currentHitPoints, gold)
@@ -56,15 +54,7 @@ namespace Engine.Models
         }
 
 
-        //TODO is this removed?
-        public Weapon CurrentWeapon { get { return _currentWeapon; }
-            set {
-                    _currentWeapon = value;
-                    OnPropertyChanged(nameof(CurrentWeapon));
-            }
-        }
-
-    
+            
         public bool HasAllTheseItems(List<ItemQuantity> items)
         {
             foreach (ItemQuantity item in items)
@@ -91,7 +81,7 @@ namespace Engine.Models
             if(Level != originalLevel)
             {
                 MaximumHitPoints = Level * 10; //TODO add modifier(s) for different classes.
-                OnLevelUp?.Invoke(this, System.EventArgs.Empty);
+                OnLeveledUp?.Invoke(this, System.EventArgs.Empty);
             }
         }
     }

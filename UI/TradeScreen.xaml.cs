@@ -22,7 +22,7 @@ namespace WPFUI
 
             if(groupedInventoryItem != null)
             {
-                Session.CurrentPlayer.RecieveGold(groupedInventoryItem.Item.Price);
+                Session.CurrentPlayer.ReceiveGold(groupedInventoryItem.Item.Price);
                 Session.CurrentTrader.AddItemToInventory(groupedInventoryItem.Item);
                 Session.CurrentPlayer.RemoveItemFromInventory(groupedInventoryItem.Item);
             }
@@ -62,7 +62,7 @@ namespace WPFUI
                               for (int i =groupedInventoryItem.Quantity; i > 0; i--)
                     {
 
-                        Session.CurrentPlayer.RecieveGold(groupedInventoryItem.Item.Price);
+                        Session.CurrentPlayer.ReceiveGold(groupedInventoryItem.Item.Price);
                             Session.CurrentTrader.AddItemToInventory(groupedInventoryItem.Item);
                             Session.CurrentPlayer.RemoveItemFromInventory(groupedInventoryItem.Item);
                         

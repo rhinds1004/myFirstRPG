@@ -52,7 +52,7 @@ namespace Engine.Factories
                 "HerbalistsHut.png");
             newWorld.LocationAt(0, 1).TraderHere = TraderFactory.GetTraderByName("Pete the Herbalist");
 
-            newWorld.LocationAt(0, 1).QuestAvailableHere.Add(QuestFactory.GetQuestByID(1));// this makes it so you don't need a temp variable to hold the location
+            newWorld.LocationAt(0, 1).QuestsAvailableHere.Add(QuestFactory.GetQuestByID(1));// this makes it so you don't need a temp variable to hold the location
 
             newWorld.AddLocation(0, 2, "Herbalist's garden",
                 "There are many plants here, with snakes hiding behind them.",

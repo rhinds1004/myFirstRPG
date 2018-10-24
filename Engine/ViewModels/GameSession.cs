@@ -26,14 +26,14 @@ namespace Engine.ViewModels
             set {
                 if (_currentPlayer != null)
                 {
-                    _currentPlayer.OnLevelUp -= OnCurrentPlayerLeveledUp;
+                    _currentPlayer.OnLeveledUp -= OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled -= OnCurrentPlayerKilled;
                 }
                 _currentPlayer = value;
 
                 if(_currentPlayer != null)
                 {
-                    _currentPlayer.OnLevelUp += OnCurrentPlayerLeveledUp;
+                    _currentPlayer.OnLeveledUp += OnCurrentPlayerLeveledUp;
                     _currentPlayer.OnKilled += OnCurrentPlayerKilled;
                 }
 
@@ -95,6 +95,7 @@ namespace Engine.ViewModels
             }
         }
         //TODO currentWeapon now moved here?
+        public GameItem CurrentWeapon { get; set; }
         //TODO might be away to simplify this..
         public bool HasLocationToNorth =>
             CurrentWorld.LocationAt(CurrentLocation.XCoordinate, CurrentLocation.YCoordinate + 1) != null; 
@@ -162,7 +163,7 @@ namespace Engine.ViewModels
 
         private void CompleteQuestsAtLocation()
         {
-            foreach(Quest quest in CurrentLocation.QuestAvailableHere)
+            foreach(Quest quest in CurrentLocation.QuestsAvailableHere)
             {
                 QuestStatus questToComplete =
                     CurrentPlayer.Quests.FirstOrDefault(q => q.PlayerQuest.ID == quest.ID && !q.IsCompleted);
@@ -191,7 +192,7 @@ namespace Engine.ViewModels
 
                        
                         RaiseMessage($"You recieve {quest.RewardGold} gold");
-                        CurrentPlayer.RecieveGold(quest.RewardGold);
+                        CurrentPlayer.ReceiveGold(quest.RewardGold);
 
                         foreach (ItemQuantity itemQuantity in quest.RewardItems)
                         {
@@ -210,7 +211,7 @@ namespace Engine.ViewModels
         }
         private void GivePlayerQuestsAtLocation()
         {
-            foreach(Quest quest in CurrentLocation.QuestAvailableHere)
+            foreach(Quest quest in CurrentLocation.QuestsAvailableHere)
             {
                 if (!CurrentPlayer.Quests.Any(q => q.PlayerQuest.ID == quest.ID)) // USing LINQ to search through the player's quest list and see if any quests avaible at this location are not in the current player's quest list.
                 {
@@ -244,14 +245,14 @@ namespace Engine.ViewModels
         public void AttackCurrentMonster()
         {
             //TODO change to fists? But type of logic is guard clause called early exit.
-            if (CurrentPlayer.CurrentWeapon == null)
+            if (CurrentWeapon == null)
             {
                 RaiseMessage("You Must select a weapon, to attack.");
                 return;
             }
 
             //Determine damage to monster
-            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentPlayer.CurrentWeapon.MinimumDamge, CurrentPlayer.CurrentWeapon.MaximumDamge);
+            int damageToMonster = RandomNumberGenerator.NumberBetween(CurrentWeapon.MinimumDamage, CurrentWeapon.MaximumDamage);
 
             if(damageToMonster == 0)
             {
@@ -298,7 +299,7 @@ namespace Engine.ViewModels
             CurrentPlayer.AddExperience(CurrentMonster.RewardExperiencePoints);
 
             RaiseMessage($"You recieved {CurrentMonster.Gold} gold.");
-            CurrentPlayer.RecieveGold(CurrentMonster.Gold);
+            CurrentPlayer.ReceiveGold(CurrentMonster.Gold);
 
 
             foreach (GameItem gameItem in CurrentMonster.Inventory)
@@ -316,7 +317,7 @@ namespace Engine.ViewModels
             RaiseMessage($"You have been killed");
 
             CurrentLocation = CurrentWorld.LocationAt(0, -1); //return player to home
-            CurrentPlayer.CompleteHeal();
+            CurrentPlayer.CompletelyHeal();
         }
 
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs eventArgs)

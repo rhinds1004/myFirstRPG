@@ -74,13 +74,13 @@ namespace Engine.Models
         public ObservableCollection<GameItem> Inventory { get; }
         public ObservableCollection<GroupedInventoryItem> GroupedInventory { get; }
 
-        public List<GameItem> Weapons => Inventory.Where(i => i is Weapon).ToList();
+        public List<GameItem> Weapons => Inventory.Where(i => i.Category == GameItem.ItemCategory.Weapon).ToList();
 
         public bool IsDead => CurrentHitPoints <= 0;
 
        
         #endregion
-
+        
         public event EventHandler OnKilled;
 
         protected LivingEntity(string name, int maximumHitPoints, int currentHitPoints, int gold, int level = 1)
@@ -116,12 +116,12 @@ namespace Engine.Models
             }
         }
 
-        public void CompleteHeal()
+        public void CompletelyHeal()
         {
             CurrentHitPoints = MaximumHitPoints;
         }
 
-        public void RecieveGold(int amountOfGold)
+        public void ReceiveGold(int amountOfGold)
         {
             Gold += amountOfGold;
         }
