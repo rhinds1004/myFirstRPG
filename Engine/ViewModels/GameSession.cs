@@ -71,13 +71,16 @@ namespace Engine.ViewModels
             {
                 if(_currentMonster != null)
                 {
+                    _currentMonster.OnActionPerformed -= OnCurrentMonsterPerformedAction;
                     _currentMonster.OnKilled -= OnCurrentMonsterKilled;
                 }
                 _currentMonster = value;
 
                 if(_currentMonster != null)
                 {
+                    _currentMonster.OnActionPerformed += OnCurrentMonsterPerformedAction;
                     _currentMonster.OnKilled += OnCurrentMonsterKilled;
+
                     RaiseMessage("");
                     RaiseMessage($"You see a {CurrentMonster.Name} here!");
                 }
@@ -265,21 +268,8 @@ namespace Engine.ViewModels
             }
             else
             {
-               
-                //TODO refactor to make it like CurrentPlayer UseCurrentWeaponOn
-                // If monster is still alive, let the monster attack
-                int damageToPlayer = RandomNumberGenerator.NumberBetween(CurrentMonster.MinimumDamage, CurrentMonster.MaximumHitPoints);
-                if(damageToPlayer <= 0 )
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} missed you!");
-                }
-                else if (damageToPlayer > 0)
-                {
-                    RaiseMessage($"The {CurrentMonster.Name} hit you for {damageToPlayer} points.");
-                    CurrentPlayer.TakeDamage(damageToPlayer);
-                    
-                }
-
+                CurrentMonster.UseCurrentWeaponOn(CurrentPlayer);   
+              
             }
         }
 
@@ -322,6 +312,11 @@ namespace Engine.ViewModels
         private void OnCurrentPlayerLeveledUp(object sender, System.EventArgs eventArgs)
         {
             RaiseMessage($"You are now level {CurrentPlayer.Level}!");
+        }
+
+        private void OnCurrentMonsterPerformedAction(object sender, string result)
+        {
+            RaiseMessage(result);
         }
 
         private void RaiseMessage(string message)
